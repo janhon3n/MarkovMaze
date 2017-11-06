@@ -1,10 +1,6 @@
 from stage import *
-
-class SolidObject:
-    stage = None
-
-    def __init__(self, stage):
-        self.stage = stage
-
-    def moveTo(self, row, col):
-        self.stage.moveObject(self.stage.getPositionOf(self), GridPosition(row,col))
+from gameObject import *
+ 
+ # An object that fills a grid box in the stage => 2 solid objects cannot fit into the same gridbox
+class SolidObject(GameObject):
+    pass
