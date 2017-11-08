@@ -15,4 +15,6 @@ class Simulation:
             self.stage.player.move()
 
             if self.gameWindow is not None:
-                self.gameWindow.drawStage(self.stage) 
+                self.gameWindow.drawState(self.stage.state) 
+        if self.gameWindow is not None:
+            self.gameWindow.getMouse()

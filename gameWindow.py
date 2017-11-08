@@ -2,30 +2,37 @@ from graphics import *
 from stage import *
 from player import *
 from coin import *
+from wall import *
+import time
 
 class GameWindow(GraphWin):
     drawObjects = []
+    pauseAfterRender = 0.005
 
     def __init__(self, title, width, height):
         super(GameWindow, self).__init__(title, width, height)
 
-    def initGrid(self, stage):
-        for i in range(stage.colCount-1):
-            l = Line(Point((self.width / stage.colCount)*(i+1), 0), Point((self.width/stage.colCount)*(i+1), self.height))
+    def initGrid(self, state):
+        rowCount = len(state)
+        colCount = len(state[0])
+        for i in range(colCount-1):
+            l = Line(Point((self.width / colCount)*(i+1), 0), Point((self.width/colCount)*(i+1), self.height))
             l.draw(self)
 
-        for i in range(stage.rowCount-1):
-            l = Line(Point(0, (self.height / stage.rowCount)*(i+1)), Point(self.width, (self.height / stage.rowCount) * (i+1)))
+        for i in range(rowCount-1):
+            l = Line(Point(0, (self.height / rowCount)*(i+1)), Point(self.width, (self.height / rowCount) * (i+1)))
             l.draw(self)
 
 
-    def drawStage(self, stage):
-        self.clearStage()
-        gridBoxWidth = self.width / stage.colCount
-        gridBoxHeight = self.height / stage.rowCount
+    def drawState(self, state):
+        self.clearState()
+        rowCount = len(state)
+        colCount = len(state[0])
+        gridBoxWidth = self.width / colCount
+        gridBoxHeight = self.height / rowCount
         padding = gridBoxWidth * 0.2
         drawBoxSideLength = min(gridBoxWidth, gridBoxHeight) - padding
-        objects = stage.getObjects()
+        objects = StateAnalyser.getObjects(state)
         for o in objects:
             x = o['position']['col']*gridBoxWidth + (gridBoxWidth / 2)
             y = o['position']['row']*gridBoxHeight + (gridBoxHeight / 2)
@@ -63,8 +70,21 @@ class GameWindow(GraphWin):
                 circle.setFill("yellow")
                 circle.draw(self)
                 self.drawObjects.append(circle)
+            if issubclass(type(o['object']), Wall):
+                rect = Rectangle(Point(x-(gridBoxWidth/2),y-(gridBoxHeight / 2)), Point(x+(gridBoxWidth/2),y+(gridBoxHeight / 2)))
+                rect.setFill("black")
+                rect.draw(self)
+                self.drawObjects.append(rect)
+            if issubclass(type(o['object']), Marker):
+                circle = Circle(Point(x,y), drawBoxSideLength / 6)
+                circle.setWidth(1)
+                circle.setFill("red")
+                circle.draw(self)
+                self.drawObjects.append(circle)
+                
+        time.sleep(self.pauseAfterRender)
 
-    def clearStage(self):
+    def clearState(self):
         for drawObject in self.drawObjects:
             drawObject.undraw()
         self.drawObjects.clear()

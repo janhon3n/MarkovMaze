@@ -6,3 +6,9 @@ class Coin(GameObject):
     def __init__(self, value):
         self.value = value
         super().__init__(self)
+
+
+class Marker(GameObject):
+    
+    def __init__(self):
+        pass
