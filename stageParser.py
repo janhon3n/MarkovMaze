@@ -1,4 +1,8 @@
 from stage import *
+from pathFinderPlayer import *
+from player import *
+from wall import *
+from coin import *
 
 # Creates a stage from a file
 # File structure:
@@ -16,13 +20,13 @@ from stage import *
 class StageParser:
 
   @staticmethod
-  def parseStage(stagename):
-    file = open('stages/'+stagename.mmstg, 'r')
+  def parseStage(stagename, gameWindow):
+    file = open('stages/'+stagename+'.mmstg', 'r')
     data = file.read()
     rows = [s.strip() for s in data.splitlines()]
     firstRow = rows[0]
     rows.remove(firstRow)
-    [playerType, enemyType] = str.split(',')
+    [playerType, enemyType] = firstRow.split(',')
     
     rowCount = len(rows)
     colCount = len(rows[0])
@@ -34,7 +38,7 @@ class StageParser:
 
         if rows[rowNumber][colNumber] == 'P':
           if playerType == 'PathFinder':
-            player = PathFindingPlayer(stage)
+            player = PathFinderPlayer(stage, gameWindow)
             stage.placePlayer(player, position)
         
         if rows[rowNumber][colNumber] == 'C':

@@ -1,6 +1,8 @@
 from solidObject import *
 from coin import *
 from copy import copy, deepcopy
+from player import *
+from bot import *
 
 class StateAnalyser:
 
@@ -10,12 +12,12 @@ class StateAnalyser:
         position = StateAnalyser.getPositionOf(state, object)
         currentRow = position['row']
         currentCol = position['col']
-        if StateAnalyser.positionIsEmptyOfSolids(state, {'row':currentRow + 1, 'col': currentCol}):
-            moves.append('Down')
         if StateAnalyser.positionIsEmptyOfSolids(state, {'row':currentRow - 1, 'col': currentCol}):
             moves.append('Up')
         if StateAnalyser.positionIsEmptyOfSolids(state, {'row':currentRow, 'col': currentCol + 1}):
             moves.append('Right')
+        if StateAnalyser.positionIsEmptyOfSolids(state, {'row':currentRow + 1, 'col': currentCol}):
+            moves.append('Down')
         if StateAnalyser.positionIsEmptyOfSolids(state, {'row':currentRow, 'col': currentCol - 1}):
             moves.append('Left')
         return moves
@@ -45,6 +47,7 @@ class StateAnalyser:
 
     @staticmethod
     def moveObjectTowardsDirection(state, object, direction):
+        reward = 0
         position = StateAnalyser.getPositionOf(state, object)
         oldPosition = copy(position)
         if direction == "Up":
@@ -56,6 +59,11 @@ class StateAnalyser:
         elif direction == "Left":
             position['col'] = position['col'] - 1
         try:
+            if state[position['row']][position['col']] is Coin:
+                if object is Player:
+                    reward = 1
+                if object is Bot:
+                    reward = -1
             StateAnalyser.moveObject(state, object, position)
             state[oldPosition['row']][oldPosition['col']] = Marker()
         except StateException as ex:
@@ -131,9 +139,12 @@ class StateAnalyser:
             return False
         for i in range(0, rowCountInState1):
             for j in range(0, colCountInState1):
-                if type(state1[i][j]) is not Marker:
-                    if type(state1[i][j]) is not type(state2[i][j]):
-                        return False
+                if type(state1[i][j]) is not type(state2[i][j]):
+                    if type(state1[i][j]) is Marker and state2[i][j] is None:
+                        continue
+                    if type(state2[i][j]) is Marker and state1[i][j] is None:
+                        continue
+                    return False
         return True
 
 

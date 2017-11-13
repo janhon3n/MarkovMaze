@@ -27,6 +27,7 @@ class PathFinderPlayer(Player):
             for lowestNode in lowestNodes:
                 [tempLowestNodes, goalNode] = lowestNode.findChildNodes(self.gameWindow)
                 newLowestNodes.extend(tempLowestNodes)
+                lowestNode.state = None
                 if goalNode is not None:
                     break
             lowestNodes = newLowestNodes
