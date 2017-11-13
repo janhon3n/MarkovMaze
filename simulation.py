@@ -14,8 +14,8 @@ class Simulation:
         while not self.stage.gameIsOver():
             for player in self.stage.players:
                 player.move()
+                if self.gameWindow is not None:
+                    self.gameWindow.drawState(self.stage.state) 
 
-            if self.gameWindow is not None:
-                self.gameWindow.drawState(self.stage.state) 
         if self.gameWindow is not None:
             self.gameWindow.getMouse()

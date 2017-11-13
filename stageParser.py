@@ -1,6 +1,7 @@
 from stage import *
 from pathFinderPlayer import *
 from rewardTreePlayer import *
+from minMaxPlayer import *
 from player import *
 from wall import *
 from coin import *
@@ -47,7 +48,7 @@ class StageParser:
           stage.placePlayer(player, position)
         if rows[rowNumber][colNumber] == '2':
           player = StageParser.createNewPlayer(players[1], stage, gameWindow)
-          stage.placeBot(player, position)
+          stage.placePlayer(player, position)
         if rows[rowNumber][colNumber] == '3':
           player = StageParser.createNewPlayer(players[2], stage, gameWindow)
           stage.placeBot(player, position)
@@ -68,10 +69,14 @@ class StageParser:
 
   @staticmethod
   def createNewPlayer(playerData, stage, gameWindow):
+    if playerData[0] == 'Human':
+      return HumanPlayer(stage, gameWindow)
     if playerData[0] == 'PathFinder':
       return PathFinderPlayer(stage, gameWindow)
     if playerData[0] == 'RewardTree':
       return RewardTreePlayer(stage, int(playerData[1][0]), float(playerData[1][1]))
+    if playerData[0] == 'MinMax':
+      return MinMaxPlayer(stage, int(playerData[1][0]), float(playerData[1][1]))
     raise StageParsingException('Undefined playertype')
 
 
