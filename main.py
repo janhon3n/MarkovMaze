@@ -9,14 +9,14 @@ from stageParser import *
 import time
 
 
-
 gameWindow = GameWindow('Simulation 1', 700, 480)
 stage = StageParser.parseStage('stage1', gameWindow)
 
 gameWindow.initGrid(stage.state)
 gameWindow.drawState(stage.state)
 
-stage.player.findPath()
+for player in stage.players:
+    player.initialize()
 simulation = Simulation(stage)
 simulation.addWindow(gameWindow)
 simulation.play()

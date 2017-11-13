@@ -2,7 +2,6 @@ from solidObject import *
 from coin import *
 from copy import copy, deepcopy
 from player import *
-from bot import *
 
 class StateAnalyser:
 
@@ -59,13 +58,11 @@ class StateAnalyser:
         elif direction == "Left":
             position['col'] = position['col'] - 1
         try:
-            if state[position['row']][position['col']] is Coin:
-                if object is Player:
-                    reward = 1
-                if object is Bot:
-                    reward = -1
+            if type(state[position['row']][position['col']]) is Coin:
+                reward = 1
             StateAnalyser.moveObject(state, object, position)
             state[oldPosition['row']][oldPosition['col']] = Marker()
+            return reward
         except StateException as ex:
             pass
 
@@ -95,8 +92,8 @@ class StateAnalyser:
         for rowNumber in range(0, rowCount):
             for colNumber in range(0, colCount):
                 newState[rowNumber][colNumber] = state[rowNumber][colNumber]
-        StateAnalyser.moveObjectTowardsDirection(newState, object, direction)
-        return newState
+        reward = StateAnalyser.moveObjectTowardsDirection(newState, object, direction)
+        return [newState, reward]
 
     @staticmethod
     def getAllCoins(state):

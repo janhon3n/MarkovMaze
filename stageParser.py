@@ -1,5 +1,6 @@
 from stage import *
 from pathFinderPlayer import *
+from rewardTreePlayer import *
 from player import *
 from wall import *
 from coin import *
@@ -26,8 +27,13 @@ class StageParser:
     rows = [s.strip() for s in data.splitlines()]
     firstRow = rows[0]
     rows.remove(firstRow)
-    [playerType, enemyType] = firstRow.split(',')
-    
+    playerCommands = firstRow.split(' ')
+    players = []
+    for playerCommand in playerCommands:
+      [playerType, argString] = playerCommand.split('/')
+      args = argString.split(',')
+      players.append([playerType, args])
+
     rowCount = len(rows)
     colCount = len(rows[0])
     
@@ -36,11 +42,21 @@ class StageParser:
       for colNumber in range(0, colCount):
         position = {'row':rowNumber, 'col':colNumber}
 
-        if rows[rowNumber][colNumber] == 'P':
-          if playerType == 'PathFinder':
-            player = PathFinderPlayer(stage, gameWindow)
-            stage.placePlayer(player, position)
-        
+        if rows[rowNumber][colNumber] == '1':
+          player = StageParser.createNewPlayer(players[0], stage, gameWindow)
+          stage.placePlayer(player, position)
+        if rows[rowNumber][colNumber] == '2':
+          player = StageParser.createNewPlayer(players[1], stage, gameWindow)
+          stage.placeBot(player, position)
+        if rows[rowNumber][colNumber] == '3':
+          player = StageParser.createNewPlayer(players[2], stage, gameWindow)
+          stage.placeBot(player, position)
+        if rows[rowNumber][colNumber] == '4':
+          player = StageParser.createNewPlayer(players[3], stage, gameWindow)
+          stage.placeBot(player, position)
+        if rows[rowNumber][colNumber] == '5':
+          player = StageParser.createNewPlayer(players[4], stage, gameWindow)
+          stage.placeBot(player, position)
         if rows[rowNumber][colNumber] == 'C':
           coin = Coin(stage)
           stage.placeObject(coin, position) 
@@ -49,3 +65,16 @@ class StageParser:
           wall = Wall(stage)
           stage.placeObject(wall, position)
     return stage
+
+  @staticmethod
+  def createNewPlayer(playerData, stage, gameWindow):
+    if playerData[0] == 'PathFinder':
+      return PathFinderPlayer(stage, gameWindow)
+    if playerData[0] == 'RewardTree':
+      return RewardTreePlayer(stage, int(playerData[1][0]), float(playerData[1][1]))
+    raise StageParsingException('Undefined playertype')
+
+
+
+class StageParsingException(Exception):
+  pass

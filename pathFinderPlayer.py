@@ -16,7 +16,7 @@ class PathFinderPlayer(Player):
         self.searchMap = StateAnalyser.getEmptyState(stage.rowCount, stage.colCount)
         self.checkedStates = []
 
-    def findPath(self):
+    def initialize(self): # find the path and store it in the moves list
         layerCounter = 1
         searchMap = []
         moveTreeRoot = MoveTreeRoot(list(self.stage.state), self)
@@ -66,7 +66,7 @@ class MoveTreeRoot:
         goalNode = None
         moves = StateAnalyser.getMovesFor(self.state, self.player)
         for move in moves:
-            newState = StateAnalyser.getNewStateFromAMove(self.state, self.player, move)
+            newState = StateAnalyser.getNewStateFromAMove(self.state, self.player, move)[0]
             if not self.player.stateIsNotChecked(newState):
                 continue
             self.player.checkedStates.append(newState)

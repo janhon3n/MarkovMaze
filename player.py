@@ -7,6 +7,8 @@ class Player(SolidObject):
     def move(self):
         return
 
+    def initialize(self):
+        return
 
 class HumanPlayer(Player):
 

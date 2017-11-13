@@ -8,14 +8,14 @@ class Stage:
     rowCount = 0
     colCount = 0
 
-    state = [[]]  # an 2d array of states
-    player = None
-    bots = []
+    state = None  # an 2d array of states
+    players = None
     
     def __init__(self, rowCount = 3, colCount = 3):
         self.rowCount = rowCount
         self.colCount = colCount
         self.state = [[None for x in range(colCount)] for y in range(rowCount)]
+        self.players = []
 
     def moveObjectTowardsDirection(self, object, direction):
         object.rotation = direction
@@ -28,12 +28,8 @@ class Stage:
 
     def placePlayer(self, playerObject, destinationPosition):
         self.placeObject(playerObject, destinationPosition)
-        self.player = playerObject
+        self.players.append(playerObject)
 
-    def placeBot(self, botObject, destinationPosition):
-        self.placeObject(botObject, destinationPosition)
-        self.bots.append(botObject)
-        
     def getPositionOf(self, object):
         for i in range(0, self.rowCount):
             for j in range(0, self.colCount):
