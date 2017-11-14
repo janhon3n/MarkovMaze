@@ -88,10 +88,9 @@ class StateAnalyser:
     def getNewStateFromAMove(state, object, direction):
         rowCount = len(state)
         colCount = len(state[0])
-        newState = [[None for x in range(0, colCount)] for y in range(0, rowCount)]
+        newState = []
         for rowNumber in range(0, rowCount):
-            for colNumber in range(0, colCount):
-                newState[rowNumber][colNumber] = state[rowNumber][colNumber]
+            newState.append(copy(state[rowNumber]))
         reward = StateAnalyser.moveObjectTowardsDirection(newState, object, direction)
         return [newState, reward]
 
