@@ -2,6 +2,7 @@ from Stage import *
 from GameObject import *
 from Stage import *
 from SearchTreePlayer import *
+import glob, os
 
 # Creates a stage from a file
 # File structure:
@@ -19,8 +20,17 @@ from SearchTreePlayer import *
 class StageParser:
 
   @staticmethod
+  def getListOfStages():
+    stages = []
+    for file in glob.glob("../stages/*.mmstg"):
+      stages.append(file.split("\\").pop().split("/").pop().split(".")[0]) 
+    return stages
+      
+
+
+  @staticmethod
   def parseStage(stagename, gameWindow):
-    file = open('stages/'+stagename+'.mmstg', 'r')
+    file = open('../stages/'+stagename+'.mmstg', 'r')
     data = file.read()
     rows = [s.strip() for s in data.splitlines()]
     firstRow = rows[0]

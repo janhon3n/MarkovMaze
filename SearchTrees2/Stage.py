@@ -40,7 +40,7 @@ class Stage:
                 
                 self.state.playerPositions[i] = position
                 for coinPos in self.state.coinPositions:
-                    if coinPos.isTheSamePositionAs(oldPosition):
+                    if coinPos.isTheSamePositionAs(position):
                         self.state.coinPositions.remove(coinPos)
                 player.rotation = move
                 return oldObjectWasCoin

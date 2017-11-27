@@ -36,6 +36,7 @@ class SearchTreePlayer(Player):
                 return
             self.checkIfAnyNodesAlreadyInTree(newNodes)
             self.activeNodes.extend(newNodes)
+            print("Dead nodes: "+str(len(self.deadNodes)) + ", Active nodes: "+str(len(self.activeNodes)))
         raise SearchException('Could not find path to goal state')
         
 

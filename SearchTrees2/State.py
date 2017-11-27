@@ -22,8 +22,6 @@ class State:
                     break
             if not sameCoinFound:
                 return False
-
-        print("("+str(state.playerPositions[0].row) + "," + str(state.playerPositions[0].col)+") == ("+str(self.playerPositions[0].row)+","+str(self.playerPositions[0].col)+")")
         return True
 
     def copy(self):
