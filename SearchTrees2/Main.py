@@ -6,15 +6,15 @@ from StageParser import *
 import sys
 
 gameWindow = None
-stages = StageParser.getListOfStages()
 while True:
+    stages = StageParser.getListOfStages()
     try:
         for i in range(0, len(stages)):
             print(str(i) + ". "+stages[i])
 
         userInput = input("Choose a stage: ")
         stageIndex = int(userInput)
-        gameWindow = GameWindow('PathFindingSimulator', 700, 480)
+        gameWindow = GameWindow('PathFindingSimulator', 1200, 480)
         stage = StageParser.parseStage(stages[stageIndex], gameWindow)
 
         gameWindow.initGrid(stage)

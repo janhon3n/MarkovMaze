@@ -46,3 +46,8 @@ class Position:
 
     def copy(self):
         return Position(self.row, self.col)
+
+    def calculateDistanceTo(self, position):
+        deltaRow = self.row - position.row
+        deltaCol = self.col - position.col
+        return abs(deltaRow) + abs(deltaCol)

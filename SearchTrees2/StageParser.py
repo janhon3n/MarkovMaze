@@ -78,10 +78,14 @@ class StageParser:
   def createNewPlayer(playerData, stage, gameWindow):
     if playerData[0] == 'Human':
       return HumanPlayer(stage, gameWindow)
-    if playerData[0] == 'SearchTree' or playerData[0] == 'BredthFirstSearchTree':
+    if playerData[0] == 'SearchTree' or playerData[0] == 'BredthFirstSearchTree' or playerData[0] == 'BredthFirst':
       return SearchTreePlayer(stage, gameWindow)
-    if playerData[0] == 'DepthFirstSearchTree':
+    if playerData[0] == 'DepthFirstSearchTree' or playerData[0] == 'DepthFirst':
       return DepthFirstSearchTreePlayer(stage, gameWindow)
+    if playerData[0] == 'DijkstraSearchTree' or playerData[0] == 'Dijkstra':
+      return DijkstraSearchTreePlayer(stage, gameWindow)
+    if playerData[0] == 'AStarSearchTree' or playerData[0] == 'AStar':
+      return AStarSearchTreePlayer(stage, gameWindow)
 #    if playerData[0] == 'MinMax':
 #      return MinMaxPlayer(stage, int(playerData[1][0]), float(playerData[1][1]))
     raise StageParsingException('Undefined playertype')

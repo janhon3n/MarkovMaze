@@ -9,6 +9,9 @@ class SearchTreePlayer(Player):
     pathToGoalState = None
     gameWindow = None
 
+    moveCost = 0.1
+    discounting = 1.0
+
     def __init__(self, stage, gameWindow):
         super().__init__(stage)
         self.gameWindow = gameWindow
@@ -25,10 +28,13 @@ class SearchTreePlayer(Player):
 
 
     def findPathToGoalState(self):
-        self.activeNodes.append(TreeNode(self.stage.state.copy(), None, None, 0, None))
+        startTime = time.time()
+        self.activeNodes.append(TreeNode(self.stage.state.copy(), None, None, 0, None, 1))
         while len(self.activeNodes) > 0:
             nodeToExpand = self.popANodeToExpand()
             if self.gameWindow is not None:
+                if nodeToExpand.move is not None:
+                    self.rotation = nodeToExpand.move
                 self.gameWindow.drawStateWithMarkers(nodeToExpand.state, nodeToExpand.markers)
             newNodes = self.expandNode(nodeToExpand)
             self.deadNodes.append(nodeToExpand)
@@ -36,7 +42,7 @@ class SearchTreePlayer(Player):
                 return
             self.checkIfAnyNodesAlreadyInTree(newNodes)
             self.activeNodes.extend(newNodes)
-            print("Dead nodes: "+str(len(self.deadNodes)) + ", Active nodes: "+str(len(self.activeNodes)))
+            print("Current node depth: "+str(nodeToExpand.treeLayer) +", Reward: "+("{0:.2f}".format(nodeToExpand.cumulatedReward))+", Dead nodes: "+str(len(self.deadNodes))+", Active nodes: "+str(len(self.activeNodes))+", Elapsed time: " + ("{0:.2f}".format(time.time() - startTime)))
         raise SearchException('Could not find path to goal state')
         
 
@@ -79,7 +85,7 @@ class SearchTreePlayer(Player):
                 for moveVector in moveVectors:
                     newPos = Position(oldPosition.row + moveVector[1], oldPosition.col + moveVector[2])
                     if self.checkThatPositionIsEmptyOfSolidsInState(node.state, newPos):
-                        newNode = TreeNode(node.state.copy(), node, moveVector[0], node.cumulatedReward, node.markers)
+                        newNode = TreeNode(node.state.copy(), node, moveVector[0], node.cumulatedReward, node.markers, node.treeLayer + 1)
                         newNode.state.playerPositions[playerIndex] = newPos
                         newNode.markers.append(oldPosition.copy())
                         playerGotCoin = False
@@ -88,8 +94,9 @@ class SearchTreePlayer(Player):
                                 playerGotCoin = True
                                 newNode.state.coinPositions.remove(coinPos)
                                 break
-                            if playerGotCoin:
-                                newNode.cumulatedReward += 1
+                        if playerGotCoin:
+                            newNode.cumulatedReward += (self.discounting ** node.treeLayer)
+                        newNode.cumulatedReward -= (self.discounting ** node.treeLayer) * self.moveCost
                         newNodes.append(newNode)
                 return newNodes
 
@@ -118,9 +125,70 @@ class SearchTreePlayer(Player):
     
 
 class DepthFirstSearchTreePlayer(SearchTreePlayer):
-    
+
     def popANodeToExpand(self):
         return self.activeNodes.pop()
+
+class DijkstraSearchTreePlayer(SearchTreePlayer):
+
+    def popANodeToExpand(self):
+        reward = -10000
+        nodeToExpand = None
+        for node in self.activeNodes:
+            if node.cumulatedReward > reward:
+                reward = node.cumulatedReward
+                nodeToExpand = node
+        self.activeNodes.remove(nodeToExpand)
+        return nodeToExpand
+
+
+    def handleDublicateNodes(self, oldNode, newNode, newNodes):
+        if newNode.cumulatedReward > oldNode.cumulatedReward:
+            oldNode.parent = newNode.parent
+            oldNode.cumulatedReward = newNode.cumulatedReward
+            oldNode.treeLayer = newNode.treeLayer
+            oldNode.move = newNode.move
+            oldNode.markers = newNode.markers
+        newNodes.remove(newNode)
+
+        
+    def checkGoalCondition(self, nodeToExpand, newNodes):
+        if len(nodeToExpand.state.coinPositions) == 0:
+            self.pathToGoalState = self.getPathFromRoot(nodeToExpand)
+            return True
+        return False
+    
+
+
+class AStarSearchTreePlayer(DijkstraSearchTreePlayer):
+
+    cumulatedRewardWeight = 1
+    heuresticWeight = 1
+
+    def popANodeToExpand(self):
+        bestValue = -10000
+        nodeToExpand = None
+        for node in self.activeNodes:
+            value = node.cumulatedReward * self.cumulatedRewardWeight + self.calculateHeuresticForState(node.state) * self.heuresticWeight
+            if value > bestValue:
+                bestValue = value
+                nodeToExpand = node
+        self.activeNodes.remove(nodeToExpand)
+        return nodeToExpand
+
+    def calculateHeuresticForState(self, state):
+        minCoinDistance = 1000
+        for playerIndex in range(0, len(self.stage.players)):
+            if self.stage.players[playerIndex] is self:
+                ownPosition = state.playerPositions[playerIndex]
+                for coinPos in state.coinPositions:
+                    distance = ownPosition.calculateDistanceTo(coinPos) 
+                    if distance < minCoinDistance:
+                        minCoinDistance = distance
+
+        return (1 / minCoinDistance)
+
+
 
 class TreeNode:
     state = None
@@ -128,12 +196,14 @@ class TreeNode:
     move = None
     parent = None
     markers = None
+    treeLayer = 0
 
-    def __init__(self, state, parent, move, cumulatedReward, markers):
+    def __init__(self, state, parent, move, cumulatedReward, markers, treeLayer):
         self.state = state
         self.parent = parent
         self.move = move
         self.cumulatedReward = cumulatedReward
+        self.treeLayer = treeLayer
         if markers is not None:
             self.markers = markers.copy()
         else:
