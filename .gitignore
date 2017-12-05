@@ -3,6 +3,8 @@ __pycache__/
 
 \.vscode/launch\.json
 
+SearchTrees2/.vscode/*
+
 SearchTrees2/\.vscode/launch\.json
 
 SearchTrees2/\.vscode/

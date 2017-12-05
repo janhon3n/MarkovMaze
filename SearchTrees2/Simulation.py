@@ -11,11 +11,16 @@ class Simulation:
         self.gameWindow = gameWindow
 
     def play(self):
-        while not self.stage.gameIsOver():
-            for player in self.stage.players:
-                player.move()
-                if self.gameWindow is not None:
-                    self.gameWindow.drawState(self.stage.state) 
+        self.playLoop()
 
         if self.gameWindow is not None:
             self.gameWindow.getMouse()
+
+    def playLoop(self):
+        while True:
+            for player in self.stage.players:
+                if self.stage.gameIsOver():
+                    return
+                player.move()
+                if self.gameWindow is not None:
+                    self.gameWindow.drawState(self.stage.state)

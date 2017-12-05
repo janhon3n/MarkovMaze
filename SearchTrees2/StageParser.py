@@ -2,6 +2,7 @@ from Stage import *
 from GameObject import *
 from Stage import *
 from SearchTreePlayer import *
+from UpdatingSearchTreePlayer import *
 import glob, os
 
 # Creates a stage from a file
@@ -86,6 +87,8 @@ class StageParser:
       return DijkstraSearchTreePlayer(stage, gameWindow)
     if playerData[0] == 'AStarSearchTree' or playerData[0] == 'AStar':
       return AStarSearchTreePlayer(stage, gameWindow)
+    if playerData[0] == 'UpdatingSearchTree':
+      return UpdatingSearchTreePlayer(stage, gameWindow)
 #    if playerData[0] == 'MinMax':
 #      return MinMaxPlayer(stage, int(playerData[1][0]), float(playerData[1][1]))
     raise StageParsingException('Undefined playertype')

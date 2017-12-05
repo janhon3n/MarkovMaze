@@ -59,22 +59,22 @@ class GameWindow(GraphWin):
 
             circle = Circle(Point(x, y), drawBoxSideLength / 2)
             circle.setWidth(3)
-            circle.setFill("lightblue")
+            circle.setFill(Stage.getPlayerColors()[playerNum])
             
             line1 = None
             line2 = None
             if rotation == 'Up':
-                line1 = Line(Point(x+(drawBoxSideLength / 7), y - (drawBoxSideLength / 2)), Point(x+(drawBoxSideLength / 7), y - (drawBoxSideLength / 2.5) + (drawBoxSideLength / 3)))
-                line2 = Line(Point(x-(drawBoxSideLength / 7), y - (drawBoxSideLength / 2)), Point(x-(drawBoxSideLength / 7), y - (drawBoxSideLength / 2.5) + (drawBoxSideLength / 3)))
+                line1 = Line(Point(x+(drawBoxSideLength / 7), y - (drawBoxSideLength / 2)), Point(x+(drawBoxSideLength / 7), y - (drawBoxSideLength / 2.5) + (drawBoxSideLength / 5)))
+                line2 = Line(Point(x-(drawBoxSideLength / 7), y - (drawBoxSideLength / 2)), Point(x-(drawBoxSideLength / 7), y - (drawBoxSideLength / 2.5) + (drawBoxSideLength / 5)))
             if rotation == 'Down':
-                line1 = Line(Point(x+(drawBoxSideLength / 7), y + (drawBoxSideLength / 2)), Point(x+(drawBoxSideLength / 7), y + (drawBoxSideLength / 2.5) - (drawBoxSideLength / 3)))
-                line2 = Line(Point(x-(drawBoxSideLength / 7), y + (drawBoxSideLength / 2)), Point(x-(drawBoxSideLength / 7), y + (drawBoxSideLength / 2.5) - (drawBoxSideLength / 3)))
+                line1 = Line(Point(x+(drawBoxSideLength / 7), y + (drawBoxSideLength / 2)), Point(x+(drawBoxSideLength / 7), y + (drawBoxSideLength / 2.5) - (drawBoxSideLength / 5)))
+                line2 = Line(Point(x-(drawBoxSideLength / 7), y + (drawBoxSideLength / 2)), Point(x-(drawBoxSideLength / 7), y + (drawBoxSideLength / 2.5) - (drawBoxSideLength / 5)))
             if rotation == 'Left':
-                line1 = Line(Point(x-(drawBoxSideLength / 2), y + (drawBoxSideLength / 7)), Point(x-(drawBoxSideLength / 2.5) + (drawBoxSideLength / 3), y + (drawBoxSideLength / 7)))
-                line2 = Line(Point(x-(drawBoxSideLength / 2), y - (drawBoxSideLength / 7)), Point(x-(drawBoxSideLength / 2.5) + (drawBoxSideLength / 3), y - (drawBoxSideLength / 7)))
+                line1 = Line(Point(x-(drawBoxSideLength / 2), y + (drawBoxSideLength / 7)), Point(x-(drawBoxSideLength / 2.5) + (drawBoxSideLength / 5), y + (drawBoxSideLength / 7)))
+                line2 = Line(Point(x-(drawBoxSideLength / 2), y - (drawBoxSideLength / 7)), Point(x-(drawBoxSideLength / 2.5) + (drawBoxSideLength / 5), y - (drawBoxSideLength / 7)))
             if rotation == 'Right':
-                line1 = Line(Point(x+(drawBoxSideLength / 2), y + (drawBoxSideLength / 7)), Point(x+(drawBoxSideLength / 2.5) - (drawBoxSideLength / 3), y + (drawBoxSideLength / 7)))
-                line2 = Line(Point(x+(drawBoxSideLength / 2), y - (drawBoxSideLength / 7)), Point(x+(drawBoxSideLength / 2.5) - (drawBoxSideLength / 3), y - (drawBoxSideLength / 7)))
+                line1 = Line(Point(x+(drawBoxSideLength / 2), y + (drawBoxSideLength / 7)), Point(x+(drawBoxSideLength / 2.5) - (drawBoxSideLength / 5), y + (drawBoxSideLength / 7)))
+                line2 = Line(Point(x+(drawBoxSideLength / 2), y - (drawBoxSideLength / 7)), Point(x+(drawBoxSideLength / 2.5) - (drawBoxSideLength / 5), y - (drawBoxSideLength / 7)))
 
             line1.setWidth(3)
             line2.setWidth(3)
@@ -82,10 +82,13 @@ class GameWindow(GraphWin):
             line1.draw(self)
             line2.draw(self)
             
+            pointText = Text(Point(x,y), str(self.stage.players[playerNum].points))
+            pointText.draw(self)
+
             self.drawObjects.append(circle)
             self.drawObjects.append(line1)
             self.drawObjects.append(line2)
-                
+            self.drawObjects.append(pointText)
         time.sleep(self.pauseAfterRender)
 
     def drawStateWithMarkers(self, state, markers):

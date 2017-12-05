@@ -2,6 +2,10 @@ from State import *
 from GameObject import *
 
 class Stage:
+    
+    @staticmethod
+    def getPlayerColors():
+        return ['lightblue', 'pink', 'lightgreen', 'orange', 'yellow']
 
     rowCount = 0
     colCount = 0
@@ -42,6 +46,7 @@ class Stage:
                 for coinPos in self.state.coinPositions:
                     if coinPos.isTheSamePositionAs(position):
                         self.state.coinPositions.remove(coinPos)
+                        player.points += 1
                 player.rotation = move
                 return oldObjectWasCoin
                 

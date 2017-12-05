@@ -4,6 +4,7 @@ from GameObject import *
 from GameWindow import *
 from StageParser import *
 import sys
+import traceback
 
 gameWindow = None
 while True:
@@ -14,7 +15,7 @@ while True:
 
         userInput = input("Choose a stage: ")
         stageIndex = int(userInput)
-        gameWindow = GameWindow('PathFindingSimulator', 1200, 480)
+        gameWindow = GameWindow('PathFindingSimulator', 960, 480)
         stage = StageParser.parseStage(stages[stageIndex], gameWindow)
 
         gameWindow.initGrid(stage)
@@ -27,6 +28,7 @@ while True:
         simulation.play()
     except Exception as ex:
         print(ex)
+        traceback.print_tb(ex.__traceback__)
     
     if gameWindow is not None:
         gameWindow.close()

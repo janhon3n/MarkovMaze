@@ -19,6 +19,8 @@ class Wall(SolidObject):
 
 class Player(SolidObject):
 
+    points = 0
+
     def move(self):
         self.stage.movePlayer(self, 'Up')        
 
