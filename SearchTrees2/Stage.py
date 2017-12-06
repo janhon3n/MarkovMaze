@@ -21,6 +21,8 @@ class Stage:
         self.state = State()
 
     def executePlayerMove(self, player, move):
+        if move == 'Stay':
+            return False
         for i in range(0, len(self.players)):
             if self.players[i] is player:
                 oldPosition = self.state.playerPositions[i]
@@ -39,7 +41,7 @@ class Stage:
                     position.col -= 1
                 if not self.positionIsEmptyOfSolids(position):
                     raise StageException('Move is not allowed (blocked by other object)')
-                if position.row < 0 or position.row > self.rowCount -1 or position.col < 0 or position.col > self.colCount -1:
+                if self.positionIsOutOfBounds(position):
                     raise StageException('Move is not allowed (out of bounds)')
                 
                 self.state.playerPositions[i] = position
@@ -82,12 +84,25 @@ class Stage:
                 return False
         return True
         
+    def positionIsEmptyOfWalls(self, position):
+        if self.walls[position.row][position.col]:
+            return False
+        return True
         
+    def positionIsOutOfBounds(self, position):
+        if position.row < 0 or position.row > self.rowCount -1 or position.col < 0 or position.col > self.colCount -1:
+            return True
+        return False
+
     def gameIsOver(self):
         if len(self.state.coinPositions) == 0:
             return True
         return False
 
+    def getIndexOfPlayer(self, player):
+        for i in range(0, len(self.players)):
+            if self.players[i] is player:
+                return i
 
 class StageException(Exception):
     pass

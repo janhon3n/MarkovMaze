@@ -32,7 +32,6 @@ class State:
             copy.coinPositions.append(coinPos.copy())
         return copy
 
-
 class Position:
     row = None
     col = None
@@ -51,3 +50,15 @@ class Position:
         deltaRow = self.row - position.row
         deltaCol = self.col - position.col
         return abs(deltaRow) + abs(deltaCol)
+
+    def getNewPositionFromAction(self, action):
+        newPos = self.copy()
+        if action == 'Up':
+            newPos.row += -1
+        if action == 'Right':
+            newPos.col += 1
+        if action == 'Down':
+            newPos.row += 1
+        if action == 'Left':
+            newPos.col += -1
+        return newPos
