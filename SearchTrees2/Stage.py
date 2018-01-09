@@ -2,10 +2,10 @@ from State import *
 from GameObject import *
 
 class Stage:
-    
-    @staticmethod
-    def getPlayerColors():
-        return ['lightblue', 'pink', 'lightgreen', 'orange', 'yellow']
+
+    # stage stores the folloing unchanging data:
+    #   walls: 2d array of boolean values ( true => wall exists)
+    #   players: a list of player objects ( object's state may change but references don't)
 
     rowCount = 0
     colCount = 0
@@ -103,6 +103,11 @@ class Stage:
         for i in range(0, len(self.players)):
             if self.players[i] is player:
                 return i
+            
+    @staticmethod
+    def getPlayerColors():
+        return ['lightblue', 'pink', 'lightgreen', 'orange', 'yellow']
+
 
 class StageException(Exception):
     pass

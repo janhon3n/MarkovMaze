@@ -1,6 +1,13 @@
 class State:
-    playerPositions = None # an array of positions of players in order
-    coinPositions = None # an array of positions of coins, order does not matter
+    # state stores the folloing changing data:
+    #   playerPositions: a list of positions for the players.
+    #                   Positions are mached to the player objects by the ORDER they are in the list
+    #                   nth position in list == positions of the n:th player object in the stages players list
+    #
+    #   coinPositions: a list of positions for the coins.
+
+    playerPositions = None
+    coinPositions = None
 
     def __init__(self):
         self.playerPositions = []
@@ -31,6 +38,8 @@ class State:
         for coinPos in self.coinPositions:
             copy.coinPositions.append(coinPos.copy())
         return copy
+
+
 
 class Position:
     row = None
