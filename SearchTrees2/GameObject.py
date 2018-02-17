@@ -7,7 +7,6 @@ class GameObject:
     def __init__(self, stage):
         self.stage = stage
 
-
 class SolidObject(GameObject):
     pass
 

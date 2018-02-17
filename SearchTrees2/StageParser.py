@@ -1,8 +1,8 @@
 from Stage import *
 from GameObject import *
 from Stage import *
-from SearchTreePlayer import *
-from UpdatingSearchTreePlayer import *
+from SearchTreePlayer/SearchTreePlayer import *
+from SearchTreePlayer/UpdatingSearchTreePlayer import *
 import glob, os
 
 # Creates a stage from a file
