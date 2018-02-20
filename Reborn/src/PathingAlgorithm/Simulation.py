@@ -1,4 +1,4 @@
-from SimulationListener import SimulationListener
+from SimulationListener import *
 
 class Simulation:
     stage = None
@@ -19,6 +19,7 @@ class Simulation:
             for player in self.stage.agents:
                 if self.stage.gameIsOver():
                     return
+                self.enviroment.executeAction(player.makeDecision())
                 player.move()
                 if self.listeners.count is not 0:
                     for listener in self.listeners:

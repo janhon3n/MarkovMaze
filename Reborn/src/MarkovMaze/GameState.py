@@ -63,14 +63,6 @@ class Position:
         deltaCol = self.col - position.col
         return abs(deltaRow) + abs(deltaCol)
 
-    def getNewPositionFromAction(self, action):
-        newPos = self.copy()
-        if action == 'Up':
-            newPos.row += -1
-        if action == 'Right':
-            newPos.col += 1
-        if action == 'Down':
-            newPos.row += 1
-        if action == 'Left':
-            newPos.col += -1
-        return newPos
+    def shift(self, shiftedRows, shitedColumns):
+        self.row += shiftedRows
+        self.col += shiftedColumns

@@ -2,11 +2,11 @@ from abc import ABC, abstractmethod
 
 class State(ABC):
     @abstractmethod
-    def equals(self, state: State) -> bool:
+    def equals(self, state) -> bool:
         pass
 
     @abstractmethod
-    def copy(self) -> State:
+    def copy(self):
         pass
 
 

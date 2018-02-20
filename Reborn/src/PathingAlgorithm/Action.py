@@ -7,7 +7,7 @@ class Action(ABC):
     initiator = None
 
     def __init__(self, initiator: Agent):
-        initiator = initiator
+        self.initiator = initiator
 
     @abstractmethod
     def execute(self, state: State) -> State:

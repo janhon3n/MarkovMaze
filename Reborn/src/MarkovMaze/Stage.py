@@ -19,6 +19,16 @@ class Stage(Enviroment):
         self.walls = [[None for x in range(colCount)] for y in range(rowCount)]
             
 
+    def executeAction(self, action: Action):
+        newState = action.execute(self.state)
+        if not self.checkStateValidity(newState):
+            raise SimulationError("Player " + player.name + " tried to execute an illigal move")
+        self.state = newState
+
+    def checkActionValidity(self, state):
+        #TODO
+        return True
+
     def placeObject(self, object, position):
         if not self.positionIsEmpty(position):
             raise StageException('Position is not empty')
@@ -29,7 +39,6 @@ class Stage(Enviroment):
         if issubclass(type(object), Player):
             self.players.append(object)
             self.state.playerPositions.append(position)
-
 
     def positionIsEmpty(self, position):
         for pos in self.state.playerPositions:
@@ -56,7 +65,8 @@ class Stage(Enviroment):
         return True
         
     def positionIsOutOfBounds(self, position):
-        if position.row < 0 or position.row > self.rowCount -1 or position.col < 0 or position.col > self.colCount -1:
+        if position.row < 0 or position.row > self.rowCount -1 or
+            position.col < 0 or position.col > self.colCount -1:
             return True
         return False
 

@@ -8,6 +8,7 @@ class Agent(ABC):
     actions = None
 
     def __init__(self, enviroment: Enviroment):
+        super(Agent, self).__init__(self)
         self.enviroment = enviroment
         self.actions = []
 
